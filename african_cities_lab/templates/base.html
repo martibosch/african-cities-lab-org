@@ -1,112 +1,355 @@
-{% load static i18n %}<!DOCTYPE html>
+{% load home_tags i18n static %}
 {% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
 <html lang="{{ LANGUAGE_CODE }}">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>{% block title %}African Cities Lab website{% endblock title %}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="African Cities Lab website">
-    <meta name="author" content="Martí Bosch">
-
-    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}">
-
-    {% block css %}
-    <!-- Latest compiled and minified Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css" integrity="sha512-GQGU0fMMi238uA+a/bdWJfpUGKUkBdgfFdgBm72SUQ6BeyWjoY/ton0tEjH+OSH9iP4Dfh+7HM0I9f5eR0L/4w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <!-- Your stuff: Third-party CSS libraries go here -->
-
-    <!-- This file stores project-specific CSS -->
-    <link href="{% static 'css/project.css' %}" rel="stylesheet">
-    {% endblock %}
-    <!-- Le javascript
-    ================================================== -->
-    {# Placed at the top of the document so pages load faster with defer #}
-    {% block javascript %}
-      <!-- Bootstrap JS -->
-      <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.min.js" integrity="sha512-OvBgP9A2JBgiRad/mM36mkzXSXaJE9BEIENnVEmeZdITvwT09xnxLtT4twkCa8m/loMbPHsvPl0T8lRGVBwjlQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-      <!-- Your stuff: Third-party javascript libraries go here -->
-
-      <!-- place project specific Javascript in this file -->
-      <script defer src="{% static 'js/project.js' %}"></script>
-
-    {% endblock javascript %}
-
-  </head>
-
-  <body>
-
-    <div class="mb-1">
-      <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <div class="container-fluid">
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <a class="navbar-brand" href="{% url 'home' %}">African Cities Lab website</a>
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="{% url 'home' %}">Home <span class="visually-hidden">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">About</a>
-              </li>
-              {% if request.user.is_authenticated %}
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link" href="{% url 'users:detail' request.user.username  %}">{% translate "My Profile" %}</a>
-                </li>
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a class="nav-link" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
-                </li>
-              {% else %}
-                {% if ACCOUNT_ALLOW_REGISTRATION %}
-              <li class="nav-item">
-                {# URL provided by django-allauth/account/urls.py #}
-                <a id="sign-up-link" class="nav-link" href="{% url 'account_signup' %}">{% translate "Sign Up" %}</a>
-              </li>
-              {% endif %}
-                <li class="nav-item">
-                  {# URL provided by django-allauth/account/urls.py #}
-                  <a id="log-in-link" class="nav-link" href="{% url 'account_login' %}">{% translate "Sign In" %}</a>
-                </li>
-              {% endif %}
-            </ul>
-          </div>
-        </div>
-      </nav>
-
-    </div>
-
-    <div class="container">
-
-      {% if messages %}
-        {% for message in messages %}
-          <div class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        {% endfor %}
-      {% endif %}
-
-      {% block content %}
-        <p>Use this document as a way to quick start any new project.</p>
-      {% endblock content %}
-
-    </div> <!-- /container -->
-
-    {% block modal %}{% endblock modal %}
-
-    {% block inline_javascript %}
-    {% comment %}
-    Script tags with only code, no src (defer by default). To run
-    with a "defer" so that you run inline code:
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="x-ua-compatible" content="ie=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>
+            {% block title %}
+                African Cities Lab
+            {% endblock title %}
+        </title>
+        {% block meta_tag_description %}
+            <meta name="description"
+                  content="{% translate "Online training to respond to the architectural, social and environmental challenges of the future African cities." %}"/>
+        {% endblock meta_tag_description %}
+        {% block static_meta_tag %}
+        {% endblock static_meta_tag %}
+        <meta name="author" content="Martí Bosch - Nabil RAIMI" />
+        <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+        {% block css %}
+            <!-- Your stuff: Third-party CSS libraries go here -->
+            <!-- Latest compiled and minified Bootstrap CSS -->
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+                  rel="stylesheet"
+                  integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+                  crossorigin="anonymous"/>
+            <!-- This file stores project-specific CSS -->
+            <link href="{% static 'css/project.css' %}" rel="stylesheet" />
+            <link rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"/>
+            <link rel="stylesheet"
+                  href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+            <link rel="stylesheet"
+                  href="https://unpkg.com/swiper@8/swiper-bundle.min.css"/>
+        {% endblock css %}
+        <!-- Le javascript
+             ================================================== -->
+        {# Placed at the top of the document so pages load faster with defer #}
+        {% block javascript %}
+            <!-- Bootstrap JS and its dependencies-->
+            <script defer
+                    src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.min.js"
+                    integrity="sha512-aVKKRRi/Q/YV+4mjoKBsE4x3H+BkegoM/em46NNlCqNTmUYADjBbeNefNxYV7giUp0VxICtqdrbqU7iVaeZNXA=="
+                    crossorigin="anonymous"></script>
+            <script defer src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous">
+            </script>
+            <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
+            </script>
+            <script defer src="https://unpkg.com/swiper@8/swiper-bundle.min.js"></script>
+            <script defer src="{% static 'js/jquery.waypoints.min.js' %}"></script>
+            <script defer src="{% static 'js/jquery.counterup.min.js' %}"></script>
+            <!-- Your stuff: Third-party javascript libraries go here -->
+            <!-- place project specific Javascript in this file -->
+            <script defer src="{% static 'js/project.js' %}"></script>
+        {% endblock javascript %}
+    </head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-476VN6QQ4Y"></script>
     <script>
-      window.addEventListener('DOMContentLoaded', () => {/* Run whatever you want */});
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-476VN6QQ4Y');
     </script>
-    {% endcomment %}
-    {% endblock inline_javascript %}
-  </body>
+    <body>
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+        {% block hellobar %}
+        {% endblock hellobar %}
+        <header id="header">
+            <nav id="main-nav"
+                 class="navbar w-100 navbar-expand-lg text-center py-3 shadow-sm z-index-2">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="{% localized_slugurl 'home' %}">
+                        <img src="{% static 'images/assets/logo.png' %}"
+                             alt="African Cities Lab"
+                             class="navbar-brand-image"
+                             width="158"
+                             height="60px"/>
+                    </a>
+                    <button class="navbar-toggler navbar-toggler-right bg-white"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbar-responsive"
+                            type="button"
+                            aria-controls="navbar-responsive"
+                            aria-expanded="false"
+                            aria-label="Toggle navigation">
+                        <i class="fa fa-bars"></i>
+                    </button>
+                    <div id="navbar-responsive"
+                         class="collapse navbar-collapse justify-content-between">
+                        <ul class="navbar-nav text-uppercase mx-5">
+                            {% localized_slugurl 'home' as url %}
+                            <li class="nav-item mx-3">
+                                <a class="nav-link {% if request.path == url %}active{% endif %}"
+                                   href="{% localized_slugurl 'home' %}">{% translate "Home" %}</a>
+                            </li>
+                            {% comment %}
+                            <li class="nav-item mx-3">
+                                <a class="nav-link" href="{% url 'programs' %}">{% translate "Programs" %}</a>
+                            </li>
+                            {% endcomment %}
+                            {% url 'about' as url %}
+                            <li class="nav-item mx-3">
+                                <a class="nav-link {% if request.path == url %}active{% endif %}"
+                                   href="{% url 'about' %}">{% translate "About" %}</a>
+                            </li>
+                            {% url 'moocs' as url %}
+                            <li class="nav-item mx-3">
+                                <a class="nav-link {% if request.path == url %}active{% endif %}"
+                                   href="{% url 'moocs' %}">{% translate "Moocs" %}</a>
+                            </li>
+                            {% comment %}
+                            <li class="nav-item mx-3">
+                                <a class="nav-link" href="{% localized_slugurl 'blog' %}">{% translate "Blog" %}</a>
+                            </li>
+                            {% endcomment %}
+                            <li class="nav-item mx-3 dropdown">
+                                <a class="nav-link dropdown-toggle"
+                                   role="button"
+                                   href="#"
+                                   id="event-dropdown"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    {% translate "Events" %}
+                                </a>
+                                <ul class="dropdown-menu py-lg-3" aria-labelledby="event-dropdown">
+                                    <li>
+                                        {% url 'events' as url %}
+                                        <a class="dropdown-item {% if request.path == url %}active{% endif %}"
+                                           href="{% url 'events' %}">{% translate "Webinars" %}</a>
+                                    </li>
+                                    <li class="pt-2">
+                                        {% url 'african-cities-conference-2023' as url %}
+                                        <a class="dropdown-item {% if request.path == url %}active{% endif %}"
+                                           href="{% url 'african-cities-conference-2023' %}">{% translate "ACC 2023" %}</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            {% url 'contact' as url %}
+                            <li class="nav-item mx-3">
+                                <a class="nav-link {% if request.path == url %}active{% endif %}"
+                                   href="{% url 'contact' %}">{% translate "Contact" %}</a>
+                            </li>
+                        </ul>
+                        <div class="right-header">
+                            <span class="dropdown px-3">
+                                <a class="text-black font-weight-bold dropdown-toggle"
+                                   href="#"
+                                   role="button"
+                                   id="lang-dropdown"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false">
+                                    <i class="fas fa-globe mx-2"></i>{{ LANGUAGE_CODE|upper }}
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="lang-dropdown">
+                                    {% get_available_languages as LANGUAGES %}
+                                    {% get_language_info_list for LANGUAGES as languages %}
+                                    {% for language in languages %}
+                                        {% if language.code != LANGUAGE_CODE %}
+                                            <li>
+                                                <a class="dropdown-item "
+                                                   onclick='document.getElementById("language-selector").value="{{ language.code }}";document.getElementById("language-form").submit()'>
+                                                    {{ language.code|upper }}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </span>
+                            <form action="{% url 'set_language' %}"
+                                  method="post"
+                                  class="ms-2 d-none"
+                                  id="language-form">
+                                {% csrf_token %}
+                                {% redirect_to self.slug as next %}
+                                <input name="next"
+                                       type="hidden"
+                                       value="{% if next %}{{ next }}{% else %}{{ request.get_full_path|slice:'3:' }}{% endif %}"/>
+                                <input name="language"
+                                       id="language-selector"
+                                       type="hidden"
+                                       value="{{ LANGUAGE_CODE }}"/>
+                            </form>
+                            {% comment %}
+                            <a class="mx-3 text-black font-weight-bold" href="#">{% translate "Sign In" %}</a>
+                            {% endcomment %}
+                            <div class="register-link">
+                                <a id="moocs_register_link_onmenu"
+                                   class="d-none btn btn__primary btn__small"
+                                   target="_blank"
+                                   href="">
+                                    {% translate "S'inscrire gratuitement" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+        <main>
+            {% block content %}
+            {% endblock content %}
+        </main>
+        <footer>
+            <div class="footer-top">
+                <div class="container-lg py-3">
+                    <div class="row justify-content-lg-between p-md-5">
+                        <div class="col-12 col-lg-7 order-2 order-lg-1">
+                            <div class="row">
+                                <div class="col-6 col-sm-4">
+                                    <h5 class="footer__col-title my-3">{% translate "Get to know us" %}</h5>
+                                    <ul class="footer-menu list-unstyled">
+                                        <li>
+                                            <a href="{% url 'about' %}">{% translate "About" %}</a>
+                                        </li>
+                                        {% comment %}
+                                        <li>
+                                            <a href="{% url 'careers' %}">{% translate "Careers" %}</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="{% localized_slugurl 'blog' %}">{% translate "Blog" %}</a>
+                                        </li>
+                                        {% endcomment %}
+                                        <li>
+                                            <a href="{% url 'events' %}">{% translate "Webinars" %}</a>
+                                        </li>
+                                        <li >
+                                            <a href="{% url 'african-cities-conference-2023' %}">{% translate "ACC 2023" %}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'contact' %}">{% translate "Contact" %}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                {% comment %}
+                                <div class="col-6 col-sm-4">
+                                    <h5 class="footer__col-title my-3">{% translate "Learn" %}</h5>
+                                    <ul class="footer-menu list-unstyled">
+                                        <li>
+                                            <a href="#">Digital</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Urban System</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Energy</a>
+                                        </li>
+                                        <li>
+                                            <a href="#">Planning</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                {% endcomment %}
+                                <div class="col-6 col-sm-4">
+                                    <h5 class="footer__col-title my-3">
+                                        {% translate "Legal" %}
+                                    </h5>
+                                    <ul class="footer-menu list-unstyled">
+                                        <li>
+                                            <a href="{% url 'terms-conditions' %}">{% translate "Terms & Condition" %}</a>
+                                        </li>
+                                        <li>
+                                            <a href="{% url 'gdpr' %}">{% translate "GDPR" %}</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-9 col-lg-5 order-1 order-lg-2">
+                            <div class="footer__articleletter-col">
+                                <h5 class="footer__col-title my-3">
+                                    {% translate "Stay updated with our newsletter" %}
+                                </h5>
+                                <p class="footer__col-text">
+                                    {% translate "Stay up to date with all the recent news, updates, and courses by simply your email address to our mailing list. We promise to never spam you." %}
+                                </p>
+                                <div class="articleletter-form py-3">
+                                    <form id="newsletter-form" action="" class="append-form">
+                                        {% csrf_token %}
+                                        <div class="input-group">
+                                            <input type="email"
+                                                   name="EMAIL"
+                                                   class="form-control"
+                                                   placeholder="{% translate "Enter your email address" %}"/>
+                                            <input name="site_language" type="hidden" value="{{ LANGUAGE_CODE }}" />
+                                            <div class="input-group-append bg_primary">
+                                                <button class="btn" type="submit">
+                                                    OK
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="social-media__wrapper">
+                                    <span>{% translate "Connect with us :" %}</span>
+                                    <ul class="list-inline m-3">
+                                        <li class="list-inline-item mx-2">
+                                            <a href="https://twitter.com/AfricanCtiesLab" class="text_primary"><i class="fab fa-twitter"></i></a>
+                                        </li>
+                                        <li class="list-inline-item mx-2">
+                                            <a href="https://www.linkedin.com/company/african-cities-lab/?viewAsMember=true"
+                                               class="text_primary"><i class="fab fa-linkedin-in"></i></a>
+                                        </li>
+                                        <li class="list-inline-item mx-2">
+                                            <a href="https://www.facebook.com/African-Cities-Lab-103073095772023"
+                                               class="text_primary"><i class="fab fa-facebook-f"></i></a>
+                                        </li>
+                                        <li class="list-inline-item mx-2">
+                                            <a href="https://instagram.com/africancitieslab?igshid=YmMyMTA2M2Y="
+                                               class="text_primary"><i class="fab fa-instagram"></i></a>
+                                        </li>
+                                        <li class="list-inline-item mx-2">
+                                            <a href="https://medium.com/@African_Cities_Lab" class="text_primary"><i class="fab fa-medium-m"></i></a>
+                                        </li>
+                                        <li class="list-inline-item mx-2">
+                                            <a href="https://www.youtube.com/channel/UC22_61it3OdPBNj3CwkndUA"
+                                               class="text_primary"><i class="fab fa-youtube"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="container-fluid">
+                    <div class="row align-items-end p-3">
+                        <div class="col">
+                            <p class="font-size-12">
+                                {% translate "© Copyright 2022 African Cities Lab. All rights reserved. " %}
+                            </p>
+                        </div>
+                        <div class="col d-flex justify-content-sm-end">
+                            <a href="{% localized_slugurl 'home' %}">
+                                <img src="{% static 'images/assets/logo-white.png' %}"
+                                     alt="African Cities Lab"
+                                     width="155px"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        {% block inline_javascript %}
+            {# Script tags with only code, no src (defer by default) #}
+        {% endblock inline_javascript %}
+    </body>
 </html>

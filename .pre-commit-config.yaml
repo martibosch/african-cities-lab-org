@@ -1,4 +1,4 @@
-exclude: "^docs/|/migrations/"
+exclude: "^docs/|/migrations/|/.terraform/"
 default_stages: [commit]
 
 repos:
@@ -25,6 +25,25 @@ repos:
     hooks:
       - id: pyupgrade
         args: [--py310-plus]
+
+  - repo: https://github.com/Riverside-Healthcare/djLint
+    rev: v1.19.13
+    hooks:
+      - id: djlint-django
+      - id: djlint-django
+        args: ['.', '--reformat']
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.7.1
+    hooks:
+      - id: prettier
+        types_or: [css, javascript]
+
+  - repo: https://github.com/thibaudcolas/pre-commit-stylelint
+    rev: v14.16.1
+    hooks:
+      - id: stylelint
+        additional_dependencies: ['stylelint', 'stylelint-prettier', 'stylelint-config-prettier']
 
   - repo: https://github.com/charliermarsh/ruff-pre-commit
     rev: v0.0.241
