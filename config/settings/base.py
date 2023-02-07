@@ -60,6 +60,9 @@ WSGI_APPLICATION = "config.wsgi.application"
 # ------------------------------------------------------------------------------
 # wagtail apps
 WAGTAIL_APPS = [
+    # wagtail localize before forms and redirects
+    "wagtail_localize",
+    "wagtail_localize.locales",
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     "wagtail.embeds",
@@ -70,7 +73,6 @@ WAGTAIL_APPS = [
     "wagtail.images",
     "wagtail.search",
     "wagtail.admin",
-    "wagtail.locales",
     "wagtail",
     "modelcluster",
     "taggit",

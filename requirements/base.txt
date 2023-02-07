@@ -20,3 +20,4 @@ django-redis==5.2.0  # https://github.com/jazzband/django-redis
 # Wagtail
 # ------------------------------------------------------------------------------
 wagtail==4.1.1  # https://github.com/wagtail/wagtail
+wagtail-localize==1.4.0  # https://www.wagtail-localize.org/
