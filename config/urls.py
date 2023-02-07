@@ -9,6 +9,8 @@ from wagtail.core import urls as wagtail_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
 urlpatterns = [
+    # Language Redirect
+    path("i18n/", include("django.conf.urls.i18n")),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.DJANGO_ADMIN_URL, admin.site.urls),
     # Wagtail Admin
