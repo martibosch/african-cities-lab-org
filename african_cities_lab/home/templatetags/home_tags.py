@@ -6,22 +6,16 @@ register = template.Library()
 
 
 @register.simple_tag(takes_context=True)
-def redirect_to(context, slug):
+def redirect_to(context, slug, target_lang):
+    target_locale = Locale.objects.get(language_code=target_lang)
     if slug is None or slug == "":
         return ""
-    english = Locale.get_default()
-    current_lang = Locale.get_active()
-    french = Locale.objects.get_for_language("fr")
-    if current_lang == english:
-        lang = english
-        target_lang = french
-    else:
-        lang = french
-        target_lang = english
-    current_page = Page.objects.filter(locale=lang, slug=slug).first()
-    page = Page.objects.filter(
-        locale=target_lang, translation_key=current_page.translation_key
-    ).first()
+    page = (
+        Page.objects.get(slug=slug)
+        .get_translations()
+        .filter(locale=target_locale)
+        .first()
+    )
     url = ""
     if page:
         url = page.url
