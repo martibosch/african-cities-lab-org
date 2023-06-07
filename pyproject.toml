@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=40.8.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "I"]
+
+[tool.ruff.isort]
+known-first-party = ["african_cities_lab"]
+
+[tool.black]
+line-length = 88
+
+[tool.djlint]
+ignore = "H006,H031"

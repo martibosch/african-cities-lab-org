@@ -1,0 +1,18 @@
+{% load wagtailimages_tags %}
+{% image self.background_image width-2000 as background_image %}
+<section class="page-banner"
+         style="background-image: linear-gradient(rgba(84,84,84,0.5) 12%, rgba(0,0,0,.5) 100%), url({{ background_image.url }})">
+    <div class="container-fluid">
+        <div class="row py-5">
+            <div class="{{ self.col_classes }}">
+                {% for block in self.one_column %}
+                    {% if block.block_type == 'heading' %}
+                        <div class="position-relative h1">{{ block.value }}</div>
+                    {% else %}
+                        <p class="my-5">{{ block.value }}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
