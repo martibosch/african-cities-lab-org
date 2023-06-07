@@ -1,4 +1,4 @@
-exclude: "^docs/|/migrations/"
+exclude: "^docs/|/migrations/|/.terraform/"
 default_stages: [commit]
 
 repos:
@@ -8,6 +8,17 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
+
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v2.40.0
+    hooks:
+      - id: commitizen
+
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.29.0
+    hooks:
+      - id: yamllint
+        args: ["-d relaxed"]
 
   - repo: https://github.com/python-jsonschema/check-jsonschema
     rev: 0.19.2
@@ -26,22 +37,36 @@ repos:
       - id: pyupgrade
         args: [--py310-plus]
 
+  - repo: https://github.com/Riverside-Healthcare/djLint
+    rev: v1.19.13
+    hooks:
+      - id: djlint-django
+      - id: djlint-django
+        args: ['.', '--reformat']
+
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v2.7.1
+    hooks:
+      - id: prettier
+        types_or: [css, javascript]
+
+  - repo: https://github.com/thibaudcolas/pre-commit-stylelint
+    rev: v14.16.1
+    hooks:
+      - id: stylelint
+        additional_dependencies: ['stylelint', 'stylelint-prettier', 'stylelint-config-prettier']
+
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: v0.0.241
+    hooks:
+      - id: ruff
+        args: ['--fix']
+      - id: ruff
+
   - repo: https://github.com/psf/black
     rev: 22.12.0
     hooks:
       - id: black
-
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.12.0
-    hooks:
-      - id: isort
-
-  - repo: https://github.com/PyCQA/flake8
-    rev: 6.0.0
-    hooks:
-      - id: flake8
-        args: ["--config=setup.cfg"]
-        additional_dependencies: [flake8-isort]
 
 # sets up .pre-commit-ci.yaml to ensure pre-commit dependencies stay up to date
 ci:
